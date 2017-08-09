@@ -22,6 +22,7 @@ void loop() {
   //write the entire 27 bytes of data, starting from address 0x00
   ram.write(0x0000, data, 27);
 
+  //read 27 bytes from address 0x0000
   ram.read(0x0000, data2, 27);
 
   Serial.print("Wrote: ");

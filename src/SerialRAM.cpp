@@ -124,21 +124,15 @@ bool SerialRAM::getAutoStore()
 ///		<param name="values">values (bytes) to be written</param>
 ///		<returns>0:success, 1:data too long to fit in transmit buffer, 2 : received NACK on transmit of address, 3 : received NACK on transmit of data, 4 : other error </returns>
 ///</summary>
-uint8_t SerialRAM::write(const uint16_t address, const uint8_t* values)
+uint8_t SerialRAM::write(const uint16_t address, const uint8_t* values, const uint16_t size)
 {
 	address16b a;
 	a.a16 = address;
 
-	//unsigned int 16 is enough to store the complete range of the RAM chip 0x07FF
-	//and it's cheap enough on 8 bit MCU performance wise
-	uint16_t size = sizeof(values) / sizeof(values[0]);
-
 	Wire.beginTransmission(this->SRAM_REGISTER);
 	Wire.write(a.a8[1]);
 	Wire.write(a.a8[0]);
-	for (uint16_t i = 0; i < size; i++) {
-		Wire.write(*(values+i));
-	}
+	Wire.write(values, size);
 	return Wire.endTransmission();
 }
 
